@@ -5,7 +5,7 @@ import QtMultimedia 5.0
 Item{
     id:music
 
-    property string soundPath: "file:///usr/share/harbour-aircraftwar/data/"
+    property string soundPath: "/sound/"
     visible: false
 
     function start_music(string)

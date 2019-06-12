@@ -1,5 +1,6 @@
 import QtQuick 2.0
-import Sailfish.Silica 1.0
+import QtQuick.Controls 2.2
+//import Sailfish.Silica 1.0
 
 Page{
     Item{
@@ -221,7 +222,7 @@ Page{
 
                 FontLoader {
                     id: localFont
-                    source: "file:///usr/share/harbour-aircraftwar/data/fzmw.ttf"
+                    source: "/fzmw.ttf"
                 }
                 Text{
                     id:double_text

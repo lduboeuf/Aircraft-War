@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QNetworkProxy>
-#include <QWebSettings>
+//#include <QWebEngineSettings>
 #include <QDebug>
 #include "src/mynetworkaccessmanagerfactory.h"
 #include "src/settings.h"
@@ -19,7 +19,8 @@
 #include <QPixmap>
 #elif defined(Q_OS_SAILFISH)
 #include <QtQuick>
-#include <sailfishapp.h>
+#include <QQmlApplicationEngine>
+//#include <sailfishapp.h>
 #include "src/myhttprequest.h"
 #include "mydes.h"
 #else
@@ -34,6 +35,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         return 0;//如果非s60 v5的机型使用此版本就退出
 #endif
 #ifdef Q_OS_SAILFISH
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication *app = new QGuiApplication(argc, argv);
 #else
     QScopedPointer<QApplication> app(createApplication(argc, argv));
@@ -49,8 +51,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app->setOrganizationName ("Star");
 #endif
     app->setApplicationVersion ("2.1.0");
-    QWebSettings::globalSettings()->setUserStyleSheetUrl(QUrl::fromLocalFile(":/i18n/comment.css"));
-    QWebSettings::globalSettings()->setFontSize(QWebSettings::MinimumFontSize, 24);
+    //TODO QWebEngineSettings::globalSettings()->setUserStyleSheetUrl(QUrl::fromLocalFile(":/i18n/comment.css"));
+    //QWebEngineSettings::globalSettings()->setFontSize(QWebEngineSettings::MinimumFontSize, 24);
 
 #if defined(Q_WS_SIMULATOR)
     QNetworkProxy proxy;
@@ -80,10 +82,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QmlApplicationViewer *viewer = new QmlApplicationViewer();
     viewer->setOrientation(QmlApplicationViewer::ScreenOrientationLockPortrait);// 锁定为竖屏
 #elif defined(Q_OS_SAILFISH)
-    QQuickView *viewer = new QQuickView();
-    QObject::connect(viewer->engine(), SIGNAL(quit()), app, SLOT(quit()));
-    viewer->engine ()->rootContext ()->setContextProperty ("httpRequest", new MyHttpRequest());
-    viewer->engine ()->rootContext ()->setContextProperty ("mydes", new MyDes());
+    QQmlApplicationEngine engine;
+    //QQuickView *viewer = new QQuickView();
+    QObject::connect(&engine, SIGNAL(quit()), app, SLOT(quit()));
+    engine.rootContext ()->setContextProperty ("httpRequest", new MyHttpRequest());
+    engine.rootContext ()->setContextProperty ("mydes", new MyDes());
 #elif defined(Q_OS_LINUX)
     QmlApplicationViewer *viewer = new QmlApplicationViewer();
 #else
@@ -96,10 +99,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     MyNetworkAccessManagerFactory network;
 
     Utility *utility = Utility::createUtilityClass();
-    utility->setScreenSize (viewer->screen ()->size ());
-    viewer->engine()->setNetworkAccessManagerFactory(&network);
-    viewer->rootContext()->setContextProperty("mysettings", &setting);
-    viewer->rootContext()->setContextProperty("utility", utility);
+    qDebug() << "height:" << app->primaryScreen()->size().height();
+    utility->setScreenSize (app->primaryScreen()->size());
+    engine.setNetworkAccessManagerFactory(&network);
+    engine.rootContext ()->setContextProperty("mysettings", &setting);
+    engine.rootContext ()->setContextProperty("utility", utility);
 #if defined(Q_OS_SYMBIAN)||defined(Q_WS_SIMULATOR)
     viewer->setSource(QUrl("qrc:/qml/symbian3/main.qml"));
     viewer->showExpanded();
@@ -107,8 +111,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer->setSource(QUrl("qrc:/qml/meego/main.qml"));
     viewer->showExpanded();
 #elif defined(Q_OS_SAILFISH)
-    viewer->setSource(QUrl("qrc:/sailfish_qml/main.qml"));
-    viewer->showFullScreen();
+    engine.load(QUrl("qrc:/sailfish_qml/main.qml"));
+    //viewer->showFullScreen();
 #elif defined(Q_OS_LINUX)
     viewer->setSource(QUrl("qrc:/qml/symbian3/main.qml"));
     viewer->setFixedSize(viewer->width(),viewer->height());

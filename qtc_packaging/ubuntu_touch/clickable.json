@@ -1,0 +1,7 @@
+{
+  "template": "qmake",
+  "kill": "aircraftwar",
+  "build_args": "CONFIG+=UBUNTU_TOUCH",
+   "make_jobs": 2
+}
+

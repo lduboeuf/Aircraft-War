@@ -172,7 +172,7 @@ Item
                 font.family: localFont.name
                 font.pointSize: 20
                 font.bold: true
-                text:"退出"
+                text:qsTr("quit")
                 anchors.centerIn: parent
             }
 
@@ -202,7 +202,7 @@ Item
                 font.family: localFont.name
                 font.pointSize: 20
                 font.bold: true
-                text:"重新开始"
+                text:qsTr("restart")
                 anchors.centerIn: parent
             }
 
@@ -233,7 +233,7 @@ Item
                 font.family: localFont.name
                 font.pointSize: 20
                 font.bold: true
-                text:"继续"
+                text:qsTr("continue")
                 anchors.centerIn: parent
             }
 
@@ -279,7 +279,7 @@ Item
             color: "#303030"
             font.family: localFont.name
             font.pointSize: 22
-            text:"飞机大战分数"
+            text:qsTr("Aircraft war score")
             anchors.horizontalCenter: parent.horizontalCenter
             y:parent.height/7-height/2
 
@@ -306,7 +306,7 @@ Item
                 font.family: localFont.name
                 font.pointSize: 20
                 font.bold: true
-                text:"退出"
+                text:qsTr("quit")
                 anchors.centerIn: parent
 
             }
@@ -334,7 +334,7 @@ Item
                 font.family: localFont.name
                 font.pointSize: 20
                 font.bold: true
-                text:"再玩一次"
+                text:qsTr("play again")
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -449,6 +449,7 @@ Item
     }
     MouseArea{
         id:yidong
+        //anchors.fill: parent
         width: main.width*2
         height:main.height*2
         property real planeWidth: planes.planeWidth

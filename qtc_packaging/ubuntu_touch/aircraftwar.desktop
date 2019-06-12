@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=aircraftwar
+Exec=aircraftwar
+Icon=assets/AircraftWar.svg
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+X-Ubuntu-Supported-Orientations=portrait
+Name[en_US]=aircraftwar.desktop

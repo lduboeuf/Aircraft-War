@@ -224,6 +224,7 @@ MyHttpRequestPrivate::MyHttpRequestPrivate(QNetworkRequest request, QObject *cal
 
 void MyHttpRequestPrivate::finished(QNetworkReply *reply)
 {
+    qDebug() << "ok network test";
     MyHttpRequest::finished (reply);
     deleteLater ();//销毁自己
 }

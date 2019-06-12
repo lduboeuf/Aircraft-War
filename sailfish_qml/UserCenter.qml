@@ -1,9 +1,11 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 2.0
-import QtWebKit 3.0
-import QtWebKit.experimental 1.0
+import QtQuick.Controls 2.2
+//import QtWebEngine 1.2
+//import QtWebKit 3.0
+//import QtWebKit.experimental 1.0
 import com.star.widget 1.0
-import Sailfish.Silica 1.0
+//import Sailfish.Silica 1.0
 
 Item{
     id:user_center_main
@@ -26,12 +28,12 @@ Item{
         var uid=mysettings.getValue("user_uid","")
         if(uid!=""){
             user_avatar .source = mysettings.getValue("user_avatar","")
-            user_nickname.text = "用户名："+mysettings.getValue("user_nickname","")
+            user_nickname.text = "username："+mysettings.getValue("user_nickname","")
 
             var url = "http://api.9smart.cn/rank/"+String(uid)+"?clientid=5"
             httpRequest.get(getInfosFinished, url)
         }else{
-            user_nickname.text = "用户名：未登录"
+            user_nickname.text = "username：not logged in"
         }
     }
 
@@ -83,7 +85,7 @@ Item{
 
     Text {
         id: user_nickname
-        text: "用户名："+mysettings.getValue("user_nickname","")
+        text: "username："+mysettings.getValue("user_nickname","")
         anchors.top: user_avatar.bottom
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
@@ -123,9 +125,9 @@ Item{
 
         var jsondata = JSON.parse(data)
         if(jsondata&&jsondata.error==0){
-            user_phone_model.text = "玩家设备："+String(jsondata.rank.model)
-            user_ranking.text = "网络排行："+String(jsondata.rank.top)
-            user_score.text = "最新得分："+String(jsondata.rank.score)
+            user_phone_model.text = "Phone model："+String(jsondata.rank.model)
+            user_ranking.text = "Rank："+String(jsondata.rank.top)
+            user_score.text = "Score："+String(jsondata.rank.score)
             mysettings.setValue("user_score",parseInt(jsondata.rank.score))
         }
     }
@@ -171,19 +173,19 @@ Item{
             anchors.centerIn: parent
             font.family: localFont.name
             font.pointSize: 20
-            text: "<b>更换账号</b>";
+            text: "<b>change account</b>";
             color: "#303030"
         }
     }
 
 
-    WebView{
+    WebEngineView{
         id: webLogin
 
         opacity: 0
         visible: opacity>0
         anchors.fill: parent
-        experimental.userAgent:"Qt; Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36  (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36"
+        //experimental.userAgent:"Qt; Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36  (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36"
 
         Behavior on opacity {
             NumberAnimation{duration: 300}

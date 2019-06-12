@@ -46,7 +46,7 @@ Item
             height: musicinfo_switch.height
             Text {
                 anchors.left: parent.left
-                text: "音乐"
+                text: "music"
                 //verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.pointSize: 22
@@ -97,7 +97,7 @@ Item
             height: sound_switch.height
             Text {
                 anchors.left: parent.left
-                text: "音效"
+                text: "sound effect"
                 //verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
                 font.pointSize: 22
@@ -145,81 +145,81 @@ Item
         }
     }
 
-    Image{
-        id:find_new_appVersion
+//    Image{
+//        id:find_new_appVersion
 
-        width: sourceSize.width*main.width/480
-        height: sourceSize.height*main.width/480
-        opacity: 1- (user_center.opacity > update_diglog.opacity ? user_center.opacity: update_diglog.opacity)
-        source:find_new_appVersion_mouse.pressed?"qrc:/Image/button_3_2.png":"qrc:/Image/button_3_1.png"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom:  my_account.top
-        anchors.bottomMargin: 20
+//        width: sourceSize.width*main.width/480
+//        height: sourceSize.height*main.width/480
+//        opacity: 1- (user_center.opacity > update_diglog.opacity ? user_center.opacity: update_diglog.opacity)
+//        source:find_new_appVersion_mouse.pressed?"qrc:/Image/button_3_2.png":"qrc:/Image/button_3_1.png"
+//        anchors.horizontalCenter: parent.horizontalCenter
+//        anchors.bottom:  my_account.top
+//        anchors.bottomMargin: 20
 
-        function checkUpdateFinished(error, data){
-            if(error)
-                return
+//        function checkUpdateFinished(error, data){
+//            if(error)
+//                return
 
-            var jsondata = JSON.parse(data)
-            if( jsondata.version ){
-                utility.console("最新版本："+jsondata.version)
-                if( utility.appVersion != jsondata.version )
-                    update_diglog.open( jsondata.version, jsondata.url )
-                else
-                    update_diglog.open( "已经是最新版本", "" )
-            }else
-                update_diglog.open( jsondata.message, "" )
-        }
+//            var jsondata = JSON.parse(data)
+//            if( jsondata.version ){
+//                utility.console("最新版本："+jsondata.version)
+//                if( utility.appVersion != jsondata.version )
+//                    update_diglog.open( jsondata.version, jsondata.url )
+//                else
+//                    update_diglog.open( "已经是最新版本", "" )
+//            }else
+//                update_diglog.open( jsondata.message, "" )
+//        }
 
-        MouseArea{
-            id:find_new_appVersion_mouse
-            anchors.fill: parent
-            onClicked:{
-                music.start_music("button")
-                var url = "http://api.9smart.cn/app/5"
-                httpRequest.get(find_new_appVersion.checkUpdateFinished, url)
-            }
-        }
-        Text{
-            anchors.centerIn: parent
-            font.family: localFont.name
-            font.pointSize: 20
-            text: "<b>检测更新</b>";
-            color: "#303030"
-        }
-    }
+//        MouseArea{
+//            id:find_new_appVersion_mouse
+//            anchors.fill: parent
+//            onClicked:{
+//                music.start_music("button")
+//                var url = "http://api.9smart.cn/app/5"
+//                httpRequest.get(find_new_appVersion.checkUpdateFinished, url)
+//            }
+//        }
+//        Text{
+//            anchors.centerIn: parent
+//            font.family: localFont.name
+//            font.pointSize: 20
+//            text: "<b>Check for updates</b>";
+//            color: "#303030"
+//        }
+//    }
 
-    Image{
-        id:my_account
+//    Image{
+//        id:my_account
 
-        width: sourceSize.width*main.width/480
-        height: sourceSize.height*main.width/480
-        opacity: 1 - update_diglog.opacity
-        source:my_account_mouse.pressed?"qrc:/Image/button_3_2.png":"qrc:/Image/button_3_1.png"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: setting02.top
-        anchors.bottomMargin: 20
-        MouseArea{
-            id:my_account_mouse
-            anchors.fill: parent
-            onClicked:{
-                music.start_music("button")
-                setting01.visible=false
-                setting02.visible=false
-                quit.visible=false
-                column.visible=false
-                my_account.visible=false
-                user_center.opacity = 1
-            }
-        }
-        Text{
-            anchors.centerIn: parent
-            font.family: localFont.name
-            font.pointSize: 20
-            text: "<b>个人中心</b>";
-            color: "#303030"
-        }
-    }
+//        width: sourceSize.width*main.width/480
+//        height: sourceSize.height*main.width/480
+//        opacity: 1 - update_diglog.opacity
+//        source:my_account_mouse.pressed?"qrc:/Image/button_3_2.png":"qrc:/Image/button_3_1.png"
+//        anchors.horizontalCenter: parent.horizontalCenter
+//        anchors.bottom: setting02.top
+//        anchors.bottomMargin: 20
+//        MouseArea{
+//            id:my_account_mouse
+//            anchors.fill: parent
+//            onClicked:{
+//                music.start_music("button")
+//                setting01.visible=false
+//                setting02.visible=false
+//                quit.visible=false
+//                column.visible=false
+//                my_account.visible=false
+//                user_center.opacity = 1
+//            }
+//        }
+//        Text{
+//            anchors.centerIn: parent
+//            font.family: localFont.name
+//            font.pointSize: 20
+//            text: "<b>My account</b>";
+//            color: "#303030"
+//        }
+//    }
 
     Image{
         id:quit
@@ -257,7 +257,7 @@ Item
             update_diglog.opacity = 1
             appDownloadUrl = downloadUrl
             if( downloadUrl!="" ){
-                dialog_text.text = "新版："+ver+"\n请使用久店下载！"
+                dialog_text.text = "New version："+ver+"\nPlease use the long shop to download！"
             }else{
                 dialog_text.text = ver
             }
@@ -267,7 +267,7 @@ Item
             font.family: localFont.name
             anchors.horizontalCenter: parent.horizontalCenter
             y:update_diglog.height/7-height/2
-            text:"提示"
+            text:"prompt"
             font.pointSize: 28
         }
         Text{
@@ -288,7 +288,7 @@ Item
             anchors.bottomMargin: update_diglog.height/6-height/2
             Text {
                 anchors.centerIn: parent
-                text: "确定"
+                text: "define"
                 font.family: localFont.name
                 font.pointSize: 28
             }
@@ -312,7 +312,7 @@ Item
             anchors.bottomMargin: update_diglog.height/7-height/2
             Text {
                 anchors.centerIn: parent
-                text: "完成"
+                text: "complete"
                 font.family: localFont.name
                 font.pointSize: 28
             }
@@ -326,17 +326,17 @@ Item
             }
         }
     }
-    UserCenter{
-        id:user_center
-        z:2
-        function keyAction()
-        {
-            user_center.opacity = 0
-            setting01.visible=true
-            setting02.visible=true
-            column.visible=true
-            my_account.visible=true
-            quit.visible=true
-        }
-    }
+//    UserCenter{
+//        id:user_center
+//        z:2
+//        function keyAction()
+//        {
+//            user_center.opacity = 0
+//            setting01.visible=true
+//            setting02.visible=true
+//            column.visible=true
+//            my_account.visible=true
+//            quit.visible=true
+//        }
+//    }
 }

@@ -25,7 +25,7 @@ Item{
         var jsondata = JSON.parse(data)
         if(jsondata){
             var count = jsondata.pager.count
-            game_user_count.text = "总人数："+count
+            game_user_count.text = "total people："+count
             for(var i=0; i<jsondata.ranks.length; ++i)
             {
                 var temp = {
@@ -214,7 +214,7 @@ Item{
             anchors.centerIn: parent
             font.family: localFont.name
             font.pointSize: 20
-            text: "<b>刷新排行榜</b>";
+            text: "<b>refresh</b>";
             color: "#303030"
             //visible: main.height!=640?true:false
         }
@@ -232,15 +232,15 @@ Item{
         anchors.centerIn: parent
         clip:true
         function open(  text_phone_model, text_game_time ){
-            phone_model.text = "手机型号："+text_phone_model
-            game_time.text = "所用时间："+String(text_game_time)+"分钟"
+            phone_model.text = "Phone model："+text_phone_model
+            game_time.text = "Time spent："+String(text_game_time)+"分钟"
             opacity = 1
         }
 
         Text{
             id: title
             font.family: localFont.name
-            text:"详细信息"
+            text:"details"
             font.pointSize: 20
             anchors.horizontalCenter: parent.horizontalCenter
             y: user_info_detail.height/7-height/2
@@ -248,7 +248,7 @@ Item{
         Text{
             id: phone_model
             font.family: localFont.name
-            text:"手机型号："
+            text:"Phone model："
             font.pointSize: 20
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
@@ -257,7 +257,7 @@ Item{
         Text{
             id: game_time
             font.family: localFont.name
-            text:"所用时间："
+            text:"Time spent："
             font.pointSize: 20
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
@@ -273,7 +273,7 @@ Item{
             anchors.bottomMargin: user_info_detail.height/7-height/2
             Text {
                 anchors.centerIn: parent
-                text: "完成"
+                text: "complete"
                 font.family: localFont.name
                 font.pointSize: 28
             }
