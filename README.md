@@ -1,9 +1,10 @@
 Aircraft-War
 ============
 
-This is a fork of https://github.com/zccrs/Aircraft-War and ported to ubuntu touch
-Unfortunatly, needed to change several things, this code might not work animore on symbian, meego.
-Removed scoring as the backend is not available animore.
+This is a fork of https://github.com/zccrs/Aircraft-War and ported to ubuntu touch.
+
+Unfortunately, needed to change several things, this code might not work anymore on symbian, meego.
+Removed scoring as the backend is not available anymore.
 
 Build for Ubuntu Touch:
 
