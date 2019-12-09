@@ -55,6 +55,16 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 UBUNTU_TOUCH {
     message("building for Ubuntu Touch")
 
+    # figure out the current build architecture
+    CLICK_ARCH=$$system(dpkg-architecture -qDEB_HOST_ARCH)
+
+    # substitute the architecture in the manifest file
+    QMAKE_SUBSTITUTES += $$PWD/qtc_packaging/ubuntu_touch/manifest.json.in
+    manifest.files = qtc_packaging/ubuntu_touch/manifest.json
+    manifest.path = /
+    INSTALLS += manifest
+
+
     target.path = /
     click_files.path = /
     click_files.files = $$PWD/qtc_packaging/ubuntu_touch/*

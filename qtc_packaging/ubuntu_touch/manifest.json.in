@@ -1,0 +1,15 @@
+{
+    \"name\": \"me.lduboeuf.aircraftwar\",
+    \"description\": \"Harbour AirCraft War\",
+    \"architecture\": \"$${CLICK_ARCH}\",
+    \"title\": \"aircraftwar\",
+    \"hooks\": {
+        \"aircraftwar\": {
+            \"apparmor\": \"aircraftwar.apparmor\",
+            \"desktop\":  \"aircraftwar.desktop\"
+        }
+    },
+    \"version\": \"0.4\",
+    \"maintainer\": \"lionel <lionel.duboeuf@gmail.com>\",
+    \"framework\" : \"ubuntu-sdk-16.04\"
+}
