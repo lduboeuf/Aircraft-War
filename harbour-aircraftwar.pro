@@ -1,6 +1,6 @@
 TARGET = aircraftwar
 
-QT += network  quick
+QT += network quick
 VERSION = 2.1.0
 
 DEFINES += Q_OS_SAILFISH
@@ -15,7 +15,7 @@ HEADERS += \
     src/windowplanes.h \
     src/utility.h \
     src/mynetworkaccessmanagerfactory.h \
-    src/myimage.h \
+    #src/myimage.h \
     src/myhttprequest.h
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
@@ -28,10 +28,10 @@ SOURCES += main.cpp \
     src/windowplanes.cpp \
     src/utility.cpp \
     src/mynetworkaccessmanagerfactory.cpp \
-    src/myimage.cpp \
+    #src/myimage.cpp \
     src/myhttprequest.cpp
 
-CONFIG += sailfishapp
+#CONFIG += sailfishapp
 RESOURCES += qml_sailfish.qrc planes.qrc font.qrc music.qrc
 #OTHER_FILES += \
 #        rpm/harbour-aircraftwar.changes.in \
@@ -45,7 +45,7 @@ RESOURCES += qml_sailfish.qrc planes.qrc font.qrc music.qrc
 #data.files += ./sound/*.wav
 #data.path = $${TARGET}/data
 
-INSTALLS += data
+#TALLS += data
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -71,5 +71,5 @@ UBUNTU_TOUCH {
     INSTALLS+=click_files
 }
 
-include (src/cryptolib/cryptolib.pri)
+#include (src/cryptolib/cryptolib.pri)
 

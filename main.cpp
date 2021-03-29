@@ -1,12 +1,12 @@
 #include <QGuiApplication>
-#include <QNetworkProxy>
+//#include <QNetworkProxy>
 //#include <QWebEngineSettings>
 #include <QDebug>
-#include "src/mynetworkaccessmanagerfactory.h"
+//#include "src/mynetworkaccessmanagerfactory.h"
 #include "src/settings.h"
 #include "src/windowplanes.h"
 #include "src/utility.h"
-#include "src/myimage.h"
+//#include "src/myimage.h"
 #if defined(Q_OS_SYMBIAN)||defined(MEEGO_EDITION_HARMATTAN)||defined(Q_WS_SIMULATOR)
 #include "qmlapplicationviewer.h"
 #include "audioplugin.h"
@@ -21,13 +21,13 @@
 #include <QtQuick>
 #include <QQmlApplicationEngine>
 //#include <sailfishapp.h>
-#include "src/myhttprequest.h"
-#include "mydes.h"
+//#include "src/myhttprequest.h"
+//#include "mydes.h"
 #else
 #include "src/mypos.h"
 #endif
 
-Q_DECL_EXPORT int main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 #ifdef Q_OS_SYMBIAN_V5
     QSysInfo::S60Version temp = QSysInfo::s60Version();
@@ -44,8 +44,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     plugin.registerTypes("GEAudio");
 #endif
 #ifdef Q_OS_SAILFISH//这是最重要的，不然商店都别想审核通过
-    app->setApplicationName ("harbour-aircraftwar");
-    app->setOrganizationName ("harbour-aircraftwar");
+    app->setApplicationName ("me.lduboeuf.aircraftwar");
+    app->setOrganizationName ("me.lduboeuf.aircraftwar");
 #else
     app->setApplicationName ("AircraftWar");
     app->setOrganizationName ("Star");
@@ -75,7 +75,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     splash->show();
     splash->raise();
 #endif
-    qmlRegisterType<MyImage> ("com.star.widget", 1, 0, "MyImage");
+    //qmlRegisterType<MyImage> ("com.star.widget", 1, 0, "MyImage");
     qmlRegisterType<WindowPlanes> ("planes", 1, 0, "Myplanes");
 
 #if defined(Q_OS_SYMBIAN)||defined(MEEGO_EDITION_HARMATTAN)||defined(Q_WS_SIMULATOR)
@@ -85,8 +85,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     //QQuickView *viewer = new QQuickView();
     QObject::connect(&engine, SIGNAL(quit()), app, SLOT(quit()));
-    engine.rootContext ()->setContextProperty ("httpRequest", new MyHttpRequest());
-    engine.rootContext ()->setContextProperty ("mydes", new MyDes());
+    //engine.rootContext ()->setContextProperty ("httpRequest", new MyHttpRequest());
+    //engine.rootContext ()->setContextProperty ("mydes", new MyDes());
+
+
 #elif defined(Q_OS_LINUX)
     QmlApplicationViewer *viewer = new QmlApplicationViewer();
 #else
@@ -96,14 +98,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     Settings setting;
-    MyNetworkAccessManagerFactory network;
+  //  MyNetworkAccessManagerFactory network;
 
     Utility *utility = Utility::createUtilityClass();
     qDebug() << "height:" << app->primaryScreen()->size().height();
     utility->setScreenSize (app->primaryScreen()->size());
-    engine.setNetworkAccessManagerFactory(&network);
+    //engine.setNetworkAccessManagerFactory(&network);
     engine.rootContext ()->setContextProperty("mysettings", &setting);
     engine.rootContext ()->setContextProperty("utility", utility);
+    engine.rootContext ()->setContextProperty ("API_KEY", "CHANGEME");
 #if defined(Q_OS_SYMBIAN)||defined(Q_WS_SIMULATOR)
     viewer->setSource(QUrl("qrc:/qml/symbian3/main.qml"));
     viewer->showExpanded();

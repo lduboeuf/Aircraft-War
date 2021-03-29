@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 //import QtWebEngine 1.2
 //import QtWebKit 3.0
 //import QtWebKit.experimental 1.0
-import com.star.widget 1.0
+//import com.star.widget 1.0
 //import Sailfish.Silica 1.0
 
 Item{
@@ -14,28 +14,28 @@ Item{
     opacity:0
     visible: opacity>0
 
-    function getInfos(){
-        var uid=mysettings.getValue("user_uid","")
-        if(uid!="")
-        {
-            var url = "http://api.9smart.cn/rank/"+String(uid)+"?clientid=5"
-            httpRequest.get(getInfosFinished, url)
-        }
-    }
+//    function getInfos(){
+//        var uid=mysettings.getValue("user_uid","")
+//        if(uid!="")
+//        {
+//            var url = "http://api.9smart.cn/rank/"+String(uid)+"?clientid=5"
+//            httpRequest.get(getInfosFinished, url)
+//        }
+//    }
 
-    function updataData()
-    {
-        var uid=mysettings.getValue("user_uid","")
-        if(uid!=""){
-            user_avatar .source = mysettings.getValue("user_avatar","")
-            user_nickname.text = "username："+mysettings.getValue("user_nickname","")
+//    function updataData()
+//    {
+//        var uid=mysettings.getValue("user_uid","")
+//        if(uid!=""){
+//            user_avatar .source = mysettings.getValue("user_avatar","")
+//            user_nickname.text = "username："+mysettings.getValue("user_nickname","")
 
-            var url = "http://api.9smart.cn/rank/"+String(uid)+"?clientid=5"
-            httpRequest.get(getInfosFinished, url)
-        }else{
-            user_nickname.text = "username：not logged in"
-        }
-    }
+//            var url = "http://api.9smart.cn/rank/"+String(uid)+"?clientid=5"
+//            httpRequest.get(getInfosFinished, url)
+//        }else{
+//            user_nickname.text = "username：not logged in"
+//        }
+//    }
 
     Behavior on opacity {
         NumberAnimation{duration: 300}
@@ -59,7 +59,7 @@ Item{
         anchors.bottom: parent.bottom
     }
 
-    MyImage{
+    Item { //MyImage{
         id:user_avatar
 
         anchors.horizontalCenter: parent.horizontalCenter
@@ -68,9 +68,9 @@ Item{
         width: parent.width/4
         height: parent.width/4
         smooth: true
-        cache: false
-        source: mysettings.getValue("user_avatar","")
-        maskSource: "qrc:/Image/mask.bmp"
+        //cache: false
+        //source: mysettings.getValue("user_avatar","")
+        //maskSource: "qrc:/Image/mask.bmp"
 
         MouseArea{
             anchors.fill: parent
@@ -119,18 +119,18 @@ Item{
         font.family: localFont.name
     }
 
-    function getInfosFinished(error, data){
-        if(error)
-            return
+//    function getInfosFinished(error, data){
+//        if(error)
+//            return
 
-        var jsondata = JSON.parse(data)
-        if(jsondata&&jsondata.error==0){
-            user_phone_model.text = "Phone model："+String(jsondata.rank.model)
-            user_ranking.text = "Rank："+String(jsondata.rank.top)
-            user_score.text = "Score："+String(jsondata.rank.score)
-            mysettings.setValue("user_score",parseInt(jsondata.rank.score))
-        }
-    }
+//        var jsondata = JSON.parse(data)
+//        if(jsondata&&jsondata.error==0){
+//            user_phone_model.text = "Phone model："+String(jsondata.rank.model)
+//            user_ranking.text = "Rank："+String(jsondata.rank.top)
+//            user_score.text = "Score："+String(jsondata.rank.score)
+//            mysettings.setValue("user_score",parseInt(jsondata.rank.score))
+//        }
+//    }
 
     Image{
         id:quit
@@ -150,81 +150,82 @@ Item{
         }
     }
 
-    Image{
-        id:my_account
+//    Image{
+//        id:my_account
 
-        width: sourceSize.width*main.width/480
-        height: sourceSize.height*main.width/480
-        source:my_account_mouse.pressed?"qrc:/Image/button_3_2.png":"qrc:/Image/button_3_1.png"
-        smooth: true
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: setting02.top
-        anchors.bottomMargin: 20
-        MouseArea{
-            id:my_account_mouse
-            anchors.fill: parent
-            onClicked:{
-                music.start_music("button")
-                webLogin.url = "http://www.9smart.cn/member/login"
-                webLogin.opacity=1
-            }
-        }
-        Text{
-            anchors.centerIn: parent
-            font.family: localFont.name
-            font.pointSize: 20
-            text: "<b>change account</b>";
-            color: "#303030"
-        }
-    }
+//        width: sourceSize.width*main.width/480
+//        height: sourceSize.height*main.width/480
+//        source:my_account_mouse.pressed?"qrc:/Image/button_3_2.png":"qrc:/Image/button_3_1.png"
+//        smooth: true
+//        anchors.horizontalCenter: parent.horizontalCenter
+//        anchors.bottom: setting02.top
+//        anchors.bottomMargin: 20
+//        MouseArea{
+//            id:my_account_mouse
+//            anchors.fill: parent
+//            onClicked:{
+//                music.start_music("button")
+//                webLogin.url = "http://www.9smart.cn/member/login"
+//                webLogin.opacity=1
+//            }
+//        }
+//        Text{
+//            anchors.centerIn: parent
+//            font.family: localFont.name
+//            font.pointSize: 20
+//            text: "<b>change account</b>";
+//            color: "#303030"
+//        }
+//    }
 
 
-    WebEngineView{
-        id: webLogin
+//    WebEngineView{
+//        id: webLogin
 
-        opacity: 0
-        visible: opacity>0
-        anchors.fill: parent
-        //experimental.userAgent:"Qt; Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36  (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36"
+//        opacity: 0
+//        visible: opacity>0
+//        anchors.fill: parent
+//        //experimental.userAgent:"Qt; Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36  (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36"
 
-        Behavior on opacity {
-            NumberAnimation{duration: 300}
-        }
+//        Behavior on opacity {
+//            NumberAnimation{duration: 300}
+//        }
 
-        onLoadingChanged:{
-            if(loadRequest.status == WebView.LoadSucceededStatus){
-                Qt.inputMethod.hide()
-                utility.console(title)
-                var jsondata=JSON.parse(title)
-                if( jsondata ){
-                    utility.console("登录成功")
-                    opacity = 0//登陆成功，返回游戏
-                    webLogin.url = "http://www.9smart.cn/member/login"
-                    mysettings.setValue("user_uid",jsondata.uid)
-                    mysettings.setValue("user_nickname",jsondata.nickname)
-                    mysettings.setValue("user_avatar",jsondata.avatar2)
-                    mysettings.setValue("logintype", jsondata.logintype)
-                    mysettings.setValue("accesstoken", jsondata.accesstoken)
-                    mysettings.setValue("user_score",0)//登录完成先将新用户的得分初始化为0
+//        onLoadingChanged:{
+//            if(loadRequest.status == WebView.LoadSucceededStatus){
+//                Qt.inputMethod.hide()
+//                utility.console(title)
+//                var jsondata=JSON.parse(title)
+//                if( jsondata ){
+//                    utility.console("登录成功")
+//                    console.log('load data:,', jsondata)
+//                    opacity = 0//登陆成功，返回游戏
+//                    webLogin.url = "http://www.9smart.cn/member/login"
+//                    mysettings.setValue("user_uid",jsondata.uid)
+//                    mysettings.setValue("user_nickname",jsondata.nickname)
+//                    mysettings.setValue("user_avatar",jsondata.avatar2)
+//                    mysettings.setValue("logintype", jsondata.logintype)
+//                    mysettings.setValue("accesstoken", jsondata.accesstoken)
+//                    mysettings.setValue("user_score",0)//登录完成先将新用户的得分初始化为0
 
-                    utility.console("user_uid："+mysettings.getValue("user_uid",""))
-                    utility.console("user_nickname："+mysettings.getValue("user_nickname",""))
-                    utility.console("user_avatar："+mysettings.getValue("user_avatar",""))
+//                    utility.console("user_uid："+mysettings.getValue("user_uid",""))
+//                    utility.console("user_nickname："+mysettings.getValue("user_nickname",""))
+//                    utility.console("user_avatar："+mysettings.getValue("user_avatar",""))
 
-                    updataData()//更新用户信息
-                }
-            }
-        }
-        BusyIndicator {
-            anchors.centerIn: parent
-            running: webLogin.loading
-        }
-    }
+//                    updataData()//更新用户信息
+//                }
+//            }
+//        }
+//        BusyIndicator {
+//            anchors.centerIn: parent
+//            running: webLogin.loading
+//        }
+//    }
 
     Image{
         id:back
 
-        opacity: webLogin.opacity
+        //opacity: webLogin.opacity
         source: "qrc:/Image/Button_back.png"
         x:main.width/18
         y:main.quit_y
@@ -234,16 +235,16 @@ Item{
             onClicked:
             {
                 Qt.inputMethod.hide()
-                if(webLogin.opacity!=0){
-                    webLogin.opacity=0
-                    webLogin.url = "http://www.9smart.cn/member/login"
-                }else{
+                //if(webLogin.opacity!=0){
+//                    webLogin.opacity=0
+//                    webLogin.url = "http://www.9smart.cn/member/login"
+                //}else{
                     keyAction()
-                }
+                //}
                 music.start_music("button")
             }
         }
     }
 
-    Component.onCompleted: updataData()
+//    Component.onCompleted: updataData()
 }

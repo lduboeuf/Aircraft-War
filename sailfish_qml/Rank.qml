@@ -1,11 +1,15 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 2.0
-import com.star.widget 1.0
+import QtQuick.Controls 2.4
+//import com.star.widget 1.0
+import "RemoteStorage.js" as RemoteStorage
 
 Item{
     id:rank_main
 
     property bool updateRanking: false
+    property string userName: ""
+
 
     visible: opacity>0
     anchors.fill: parent
@@ -16,39 +20,51 @@ Item{
 
     function keyAction(){}
 
-    function getRankFinished(error, data){
+    function getRankFinished(data){
         updateRanking = false
+        busyIndicator.running = false
 
-        if(error)
-            return
+//        if(error)
+//            return
 
-        var jsondata = JSON.parse(data)
-        if(jsondata){
-            var count = jsondata.pager.count
+       // console.log(data)
+
+       // var jsondata = JSON.parse(data)
+       // if(jsondata){
+            var count = data.length
             game_user_count.text = "total people："+count
-            for(var i=0; i<jsondata.ranks.length; ++i)
+            rank_model.clear()
+            for(var i=0; i<data.length; ++i)
             {
                 var temp = {
-                    nickname:jsondata.ranks[i].nickname,
-                    score:jsondata.ranks[i].score,
-                    avatar:jsondata.ranks[i].avatar,
-                    user_model:jsondata.ranks[i].model,
-                    gameRuningTime:jsondata.ranks[i].time
+                    nickname:data[i].name,
+                    score:data[i].score,
+                    gameRuningTime:data[i].date
                 }
                 rank_model.append(temp)
             }
-        }
+       // }
     }
 
     function resetRank( isOntStart )//刷新排行榜
     {
         if(updateRanking)
             return
+        busyIndicator.running = true
         updateRanking = true//避免重复刷新
         rank_model.clear()//先清空原来的排行榜
         rank_list.rank_page = 1
-        var url="http://api.9smart.cn/ranks?clientid=5&page=1"
-        httpRequest.get(getRankFinished, url)
+        no_network_lbl.visible = false
+        userName = mysettings.getValue("user_uid","")
+        RemoteStorage.getAll(API_KEY,getRankFinished,
+                             function(error) {
+                                 console.log(error)
+                                 no_network_lbl.visible = true
+                                 busyIndicator.running = false
+                             })
+
+        //httpRequest.get(getRankFinished, url)
+
     }
     function addRank(page)//增加排行榜
     {
@@ -58,8 +74,8 @@ Item{
 
         if(rank_model.count>0 ){
             utility.console("增加排行榜")
-            var url="http://api.9smart.cn/ranks?clientid=5&page="+String(page)
-            httpRequest.get(getRankFinished, url)
+            //var url="http://api.9smart.cn/ranks?clientid=5&page="+String(page)
+            //httpRequest.get(getRankFinished, url)
         }
     }
 
@@ -104,14 +120,16 @@ Item{
         Item{
             width: rank_list.width
             height: main.width/10
+            property bool isCurrentUser: rank_main.userName === nickname
             Text {
                 id: number
 
                 text: String(index+1)
                 anchors.verticalCenter: parent.verticalCenter
-                font.pointSize: 20
+                font.pointSize: 18
+                color: isCurrentUser ? "#895253" : "#303030"
             }
-            MyImage{
+            Item{ // MyImage {
                 id:user_avatar
 
                 width: parent.height-10
@@ -120,8 +138,8 @@ Item{
                 anchors.left: number.right
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
-                maskSource: "qrc:/Image/mask.bmp"
-                source: avatar
+                //maskSource: "qrc:/Image/mask.bmp"
+                //source: avatar
             }
             Text{
                 id:user_name
@@ -135,6 +153,7 @@ Item{
                 text: nickname
                 font.pointSize: 20
                 font.family: localFont.name
+                color: isCurrentUser ? "#895253" : "#303030"
             }
 
             Text{
@@ -145,6 +164,7 @@ Item{
                 text:score
                 font.pointSize: 20
                 font.family: localFont.name
+                color: isCurrentUser ? "#895253" : "#303030"
             }
             MouseArea{
                 anchors.fill: parent
@@ -170,6 +190,25 @@ Item{
         font.family: localFont.name
     }
 
+    BusyIndicator {
+        id: busyIndicator
+        anchors.centerIn: parent
+        running: false
+    }
+
+    Text {
+        id: no_network_lbl
+        visible: false
+        anchors.centerIn: parent
+        color: "black"
+        font.pointSize: 18
+        font.family: localFont.name
+        //elide: Text.ElideRight
+        wrapMode: Text.WordWrap
+        width: parent.width - 20
+        text: qsTr('something went wrong on server or no internet available')
+    }
+
     ListView{
         id:rank_list
         width: rank01.width
@@ -183,6 +222,7 @@ Item{
         delegate: my_component
 
         model: rank_model
+
 
         onMovementEnded: {
             //utility.console("停止滑动")

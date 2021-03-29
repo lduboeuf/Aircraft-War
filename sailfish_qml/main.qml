@@ -265,10 +265,10 @@ ApplicationWindow{
 //                anchors.topMargin: 10
 //                property string font_names:"00"
 
-//                FontLoader {
-//                    id: localFont
-//                    source: "/fzmw.ttf"
-//                }
+////                FontLoader {
+////                    id: localFont
+////                    source: "/fzmw.ttf"
+////                }
 //                Text{
 //                    id:double_text
 
@@ -299,33 +299,33 @@ ApplicationWindow{
 //                }
 //            }
 
-//            Image {
-//                id: rank
+            Image {
+                id: rank
 
-//                width: sourceSize.width*main.width/480
-//                height: sourceSize.height*main.width/480
-//                source: "qrc:/Image/Button_rank.png"
-//                y:unfold.y
-//                x:unfold.x
-//                visible:false
-//                smooth: true
-//                Behavior on y{
-//                    NumberAnimation{duration: 200}
-//                }
-//                MouseArea{
-//                    anchors.fill: parent
-//                    onClicked:
-//                    {
-//                        music.start_music("button")
-//                        unfold.changedUnfold()
-//                        glint.stop()
-//                        rankEntity.opacity=1
-//                        start_main.opacity=0
-//                        opacity=1
-//                        rankEntity.resetRank( true )//刷新排行榜
-//                    }
-//                }
-//            }
+                width: sourceSize.width*main.width/480
+                height: sourceSize.height*main.width/480
+                source: "qrc:/Image/Button_rank.png"
+                y:unfold.y
+                x:unfold.x
+                visible:false
+                smooth: true
+                Behavior on y{
+                    NumberAnimation{duration: 200}
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked:
+                    {
+                        music.start_music("button")
+                        unfold.changedUnfold()
+                        //glint.stop()
+                        rankEntity.opacity=1
+                        start_main.opacity=0
+                        opacity=1
+                        rankEntity.resetRank( true )//刷新排行榜
+                    }
+                }
+            }
             Image {
                 id: setting
 
@@ -394,21 +394,21 @@ ApplicationWindow{
                 }
                 function stretch()
                 {
-                    //rank.visible=true
+                    rank.visible=true
                     about.visible=true
                     setting.visible=true
                     //button_center.visible=true
 
                     about.y=unfold.y-about.height-main.height/35
                     setting.y=unfold.y-about.height-setting.height-2*main.height/35
-                    //rank.y=unfold.y-about.height-setting.height-rank.height-3*main.height/35
+                    rank.y=unfold.y-about.height-setting.height-rank.height-3*main.height/35
                     //button_center.y = unfold.y-about.height-setting.height-rank.height-button_center.height-4*main.height/35
                 }
                 function shrink()
                 {
                     about.y=unfold.y
                     setting.y=unfold.y
-                    //rank.y=unfold.y
+                    rank.y=unfold.y
                     //button_center.y=unfold.y
                 }
                 function changedUnfold()
@@ -428,7 +428,7 @@ ApplicationWindow{
                 onRotationChanged:
                     if(rotation==0)
                     {
-                        //rank.visible=false
+                        rank.visible=false
                         about.visible=false
                         setting.visible=false
                         //button_center.visible=false
@@ -490,6 +490,13 @@ ApplicationWindow{
                 start_main.opacity=1
                 opacity=0
                 music.start_music("button")
+            }
+
+            onHighScoreReached: {
+                music.start_music("button")
+                rankEntity.opacity=1
+                start_main.opacity=0
+                rankEntity.resetRank( true )//刷新排行榜
             }
         }
         Rank{

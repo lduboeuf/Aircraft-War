@@ -9,5 +9,6 @@
         <file>sailfish_qml/Rank.qml</file>
         <file>sailfish_qml/Setting.qml</file>
         <file>sailfish_qml/UserCenter.qml</file>
+        <file>sailfish_qml/RemoteStorage.js</file>
     </qresource>
 </RCC>

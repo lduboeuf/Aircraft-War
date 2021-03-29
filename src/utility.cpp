@@ -126,11 +126,11 @@ void Utility::consoleLog(QString str)
 
 QString Utility::getCookie(QString cookieName)
 {
-    QList<QNetworkCookie> temp = NetworkCookieJar::GetInstance ()->cookies ();
-    foreach( QNetworkCookie cookie, temp ) {
-        if( cookie.name () == cookieName)
-            return cookie.value ();
-    }
+//    QList<QNetworkCookie> temp = NetworkCookieJar::GetInstance ()->cookies ();
+//    foreach( QNetworkCookie cookie, temp ) {
+//        if( cookie.name () == cookieName)
+//            return cookie.value ();
+//    }
     return "";
 }
 

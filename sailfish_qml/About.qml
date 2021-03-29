@@ -47,6 +47,7 @@ Item
         anchors.centerIn: parent
         //anchors.verticalCenter: parent.verticalCenter
         anchors.margins: 24
+        spacing:24
 //        anchors{
 //            top:about01.bottom
 //            bottom: about02.top
@@ -76,6 +77,13 @@ Item
             onLinkActivated: Qt.openUrlExternally(link)
             text: " This project is a port of AirCraft Game <br/> made by zccrs (github) .<br/> <a href=\"https://github.com/lduboeuf/Aircraft-War\">source code</a> <br/>"
         }
+
+        Label {
+            font.family: localFont.name
+            textFormat: Text.RichText
+            text: "Hints: Once you catched a bomb,<br/> double tap to release it, <br/>all planes will be destroyed"
+        }
+
     //    }
     }
 

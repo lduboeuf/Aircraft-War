@@ -1,6 +1,8 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 2.0
+import QtQuick.Controls 2.4
 import planes 1.0
+import "RemoteStorage.js" as RemoteStorage
 
 Item
 {
@@ -12,15 +14,18 @@ Item
     property bool running: false
     property int myscore: 0//记录得分
     property string cacheScore:""
+    property bool hasHighScoreSaved: false
+
+    signal highScoreReached()
 
     Component.onCompleted: {
         mysettings.setValue("bomb",parseInt(0))//一定要初始化，不然得分不准确
         mysettings.setValue("myscore", parseInt(0))//一定要初始化，不然得分不准确
-        var temp = mysettings.getValue("cacheScore","")
-        if( temp != "" ){//如果上次有上传失败的分数
-            var url="http://api.9smart.cn/ranks"
-            httpRequest.post(uploadFinished, url, temp)
-        }
+//        var temp = mysettings.getValue("cacheScore","")
+//        if( temp != "" ){//如果上次有上传失败的分数
+//            var url="http://api.9smart.cn/ranks"
+//            httpRequest.post(uploadFinished, url, temp)
+//        }
     }
 
     Behavior on opacity {
@@ -61,8 +66,60 @@ Item
         }
     }
 
-    function addScore(score)
+    function checkScore(score)
     {
+
+        if(score <=  mysettings.getValue("user_score", 0)){
+            busyIndicator.running = false
+            return
+        }
+
+        RemoteStorage.canSave(API_KEY,score,
+                              function(success){
+                                  if (success.canSave) {
+                                      music.start_music("achievement")
+                                      highScorePopup.opacity=1
+                                  }
+                                  busyIndicator.running = false
+                                  hasHighScoreSaved = false
+
+
+                              },
+                              function(error) {
+                                  busyIndicator.running = false
+                                console.log("error on canSave:", error)
+                              });
+
+
+
+
+    }
+
+    function saveScore(score) {
+        RemoteStorage.save(API_KEY,
+                    {name:mysettings.getValue("user_uid",""), score: score, env: "test" },
+                    function (success) {
+                        mysettings.setValue("cacheScore","")//记得要设为空，不然下次还会post
+                        mysettings.setValue("cacheScoreInt",0)
+                        mysettings.setValue("user_score",parseInt(mysettings.getValue("myscore",parseInt(0))))
+                        game_main.highScoreReached()
+                    },
+                    function (error){
+                        console.log("oalala error", error)
+                        mysettings.setValue("cacheScore", cacheScore)
+                        mysettings.setValue("cacheScoreInt",parseInt(mysettings.getValue("myscore",parseInt(0))))
+                    });
+    }
+
+    onHighScoreReached: {
+        planes.quit_game()
+        keyAction()
+        highScorePopup.opacity=0
+        dialog_window.opacity=0
+        gameover.opacity=0
+    }
+
+/*
         utility.console( "两个记录分数的值分别是："+score+","+mysettings.getValue("myscore",parseInt(0)) )
         var temp_times1 = parseFloat(parseFloat(planes.gameRuningTime)/60000.0).toFixed(2)
         utility.console("所用时间为："+temp_times1+"分钟")
@@ -71,16 +128,18 @@ Item
         var temp1 = mysettings.getValue("cacheScoreInt",0)
         var uid = mysettings.getValue("user_uid","")
 
-        var url="http://api.9smart.cn/ranks"
-
+        //var url="http://api.9smart.cn/ranks"
+        console.log("temp1", temp1, "score", score, mysettings.getValue("user_score",0), mysettings.getValue("myscore",parseInt(0)))
         if( temp!="" && temp1>score ){
             mysettings.setValue("myscore",parseInt(temp1))
             var postdata = temp
             console.log(postdata)
             cacheScore = postdata//记录要post的数据
 
-            httpRequest.post(uploadFinished, url, postdata)
+            RemoteStorage.save({name:uid, score: score }, uploadFinished);
+            //httpRequest.post(uploadFinished, url, postdata)
         }else if(uid != "" && parseInt(score) > parseInt(mysettings.getValue("user_score",0) )){//
+            console.log("plikouzote")
             if( parseInt(score) !=  parseInt(mysettings.getValue("myscore",parseInt(0))) )
                     return 0;
 
@@ -97,13 +156,15 @@ Item
             var postdata = 'clientid=6&score='+encodeURIComponent(str_temp)
 
             cacheScore = postdata//记录要post的数据
-            httpRequest.post(uploadFinished, url, postdata)
+            RemoteStorage.save({name:uid, score: score }, uploadFinished);
+            //httpRequest.post(uploadFinished, url, postdata)
             console.log(postdata)
         }else{
             console.log(uid)
             console.log(score+","+parseInt(mysettings.getValue("user_score",0) ))
         }
     }
+    */
 
     Image{
         id:pause
@@ -183,7 +244,6 @@ Item
                     planes.quit_game()
                     keyAction()
                     dialog_window.opacity=0
-                    game_main.addScore(myscore)
                 }
             }
         }
@@ -210,7 +270,6 @@ Item
                 id:restartmouse
                 anchors.fill: parent
                 onClicked: {
-                    game_main.addScore(myscore)
                     music.start_music("button")
                     planes.quit_game()
                     dialog_window.opacity=0
@@ -276,6 +335,7 @@ Item
         }
 
         Text {
+            id: myscoreTitle
             color: "#303030"
             font.family: localFont.name
             font.pointSize: 22
@@ -286,12 +346,40 @@ Item
         }
 
         Text {
+            id: txtMyScore
             color: "#303030"
             font.family: localFont.name
             font.pointSize: 28
             text:myscore==0?"0000":myscore
-            anchors.centerIn: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top:myscoreTitle.bottom
+            anchors.topMargin: 20
         }
+
+        Row {
+            anchors.top: txtMyScore.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.left: parent.left
+            visible:myscore <  mysettings.getValue("user_score", 0)
+
+            Text {
+                color: "#303030"
+                font.family: localFont.name
+                font.pointSize: 20
+                text:qsTr("My top score:")
+            }
+
+            Text {
+                id: txtMyTopScore
+                color: "#303030"
+                font.family: localFont.name
+                font.pointSize: 20
+                text:mysettings.getValue("user_score", 0)
+
+            }
+        }
+
+
         Image{
             id:gamequit
 
@@ -349,6 +437,163 @@ Item
             }
         }
     }
+
+    BusyIndicator {
+        id: busyIndicator
+        z: 100
+        anchors.centerIn: parent
+        running: false
+    }
+
+    Image{
+        id:highScorePopup
+
+        z:3
+        width: sourceSize.width*main.width/480
+        height: sourceSize.height*main.width/480
+        anchors.centerIn: parent
+        source: "qrc:/Image/button_1.png"
+        smooth: true
+        opacity: 0
+        visible: opacity>0
+        Behavior on opacity {
+            NumberAnimation{duration: 300}
+        }
+        Rectangle{
+            anchors.fill: parent
+            radius: 11
+            opacity: 0.2
+            color: "black"
+        }
+
+        MouseArea {
+            anchors.fill: parent
+        }
+
+        Text {
+            color: "#303030"
+            font.family: localFont.name
+            font.pointSize: 22
+            text:qsTr("Congratulations!")
+            anchors.horizontalCenter: parent.horizontalCenter
+            y:parent.height/7-height/2
+
+        }
+
+        Text {
+            color: "#303030"
+            font.family: localFont.name
+            font.pointSize: 18
+            text:qsTr("You reached top level high scores")
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: user_name.top
+
+        }
+        TextField {
+            id: user_name
+            property string currentUserName: mysettings.getValue("user_uid","")
+            anchors.centerIn: parent
+            width: parent.width - 4
+            font.pointSize: 22
+            maximumLength: 45
+            placeholderText: currentUserName.length === 0 ? qsTr("Please enter a name"): ""
+
+            //color: "#303030"
+            font.family: localFont.name
+
+            text: mysettings.getValue("user_uid","")
+        }
+
+        Image{
+
+            width: sourceSize.width*main.width/480
+            height: sourceSize.height*main.width/480
+            source:gamescoreCancelMouse.pressed? "qrc:/Image/button_2_2.png": "qrc:/Image/button_2_1.png"
+            smooth: true
+            x:parent.width/4-width/2
+            y:6*parent.height/7-height/2
+            Text{
+                color: "#303030"
+                font.family: localFont.name
+                font.pointSize: 20
+                font.bold: true
+                text:qsTr("Cancel")
+                anchors.centerIn: parent
+            }
+
+            MouseArea{
+                id:gamescoreCancelMouse
+                anchors.fill: parent
+                onClicked: {
+                    music.start_music("button")
+                    highScorePopup.opacity=0
+                }
+            }
+        }
+
+
+        Image{
+            id:highScoreOK
+
+            width: sourceSize.width*main.width/480
+            height: sourceSize.height*main.width/480
+            source:highScoreOKMouse.pressed? "qrc:/Image/button_2_2.png": "qrc:/Image/button_2_1.png"
+            smooth: true
+            x:parent.width/4-width/2
+            y:6*parent.height/7-height/2
+            Text{
+                color: "#303030"
+                font.family: localFont.name
+                font.pointSize: 20
+                font.bold: true
+                text:qsTr("OK")
+                anchors.centerIn: parent
+
+            }
+
+            MouseArea{
+                id:highScoreOKMouse
+                anchors.fill: parent
+                onClicked: {
+                    if (user_name.text.length > 0 && !hasHighScoreSaved) {
+
+                        mysettings.setValue("user_uid", user_name.text)
+                        hasHighScoreSaved = true
+                        saveScore(myscore)
+                    }
+
+                }
+            }
+        }
+
+        Image{
+            width: sourceSize.width*main.width/480
+            height: sourceSize.height*main.width/480
+            source: highScoreCancelMouse.pressed? "qrc:/Image/button_2_2.png": "qrc:/Image/button_2_1.png"
+            smooth: true
+            x:3*parent.width/4-width/2
+            y:highScoreOK.y
+            Text{
+                color: "#303030"
+                font.family: localFont.name
+                font.pointSize: 20
+                font.bold: true
+                text:qsTr("cancel")
+                anchors.centerIn: parent
+            }
+            MouseArea{
+                id:highScoreCancelMouse
+                anchors.fill: parent
+                onClicked: {
+                    music.start_music("button")
+                    highScorePopup.opacity=0
+                }
+            }
+        }
+    }
+
+
+
 
     Image{
         id:mybomb
@@ -422,7 +667,10 @@ Item
             planes.enabled=false
             mysettings.setValue("bomb",parseInt(0))
             bomb=0
-            game_main.addScore(myscore)
+            if (myscore > 0) {
+                busyIndicator.running = true
+                game_main.checkScore(myscore)
+            }
         }
 
         Timer{
