@@ -18,6 +18,7 @@
 #include <QImage>
 #include <QPixmap>
 #elif defined(Q_OS_SAILFISH)
+#include <QUuid>
 #include <QtQuick>
 #include <QQmlApplicationEngine>
 //#include <sailfishapp.h>
@@ -98,6 +99,10 @@ int main(int argc, char *argv[])
 #endif
 
     Settings setting;
+    QVariant uid = setting.getValue("uid","");
+    if (uid.toString().isEmpty()) {
+        setting.setValue("uid", QUuid::createUuid());
+    }
   //  MyNetworkAccessManagerFactory network;
 
     Utility *utility = Utility::createUtilityClass();

@@ -446,6 +446,7 @@ ApplicationWindow{
             Image{
                 id:quit
                 smooth: true
+                visible: false
                 source: "qrc:/Image/Button_back.png"
                 x:main.width/18
                 width: sourceSize.width*main.width/480

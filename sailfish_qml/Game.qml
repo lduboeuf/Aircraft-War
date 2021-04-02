@@ -21,6 +21,7 @@ Item
     Component.onCompleted: {
         mysettings.setValue("bomb",parseInt(0))//一定要初始化，不然得分不准确
         mysettings.setValue("myscore", parseInt(0))//一定要初始化，不然得分不准确
+
 //        var temp = mysettings.getValue("cacheScore","")
 //        if( temp != "" ){//如果上次有上传失败的分数
 //            var url="http://api.9smart.cn/ranks"
@@ -74,6 +75,7 @@ Item
             return
         }
 
+
         RemoteStorage.canSave(API_KEY,score,
                               function(success){
                                   if (success.canSave) {
@@ -96,7 +98,8 @@ Item
     }
 
     function saveScore(score) {
-        RemoteStorage.save(API_KEY,
+        var uid = mysettings.getValue("uid","")
+        RemoteStorage.save(API_KEY,uid,
                     {name:mysettings.getValue("user_uid",""), score: score, env: "test" },
                     function (success) {
                         mysettings.setValue("cacheScore","")//记得要设为空，不然下次还会post
