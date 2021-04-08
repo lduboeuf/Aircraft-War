@@ -20,3 +20,4 @@ build*/
 
 # vim tmp file
 *.swp
+.clickable
