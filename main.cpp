@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     //engine.setNetworkAccessManagerFactory(&network);
     engine.rootContext ()->setContextProperty("mysettings", &setting);
     engine.rootContext ()->setContextProperty("utility", utility);
-    engine.rootContext ()->setContextProperty ("API_KEY", "CHANGEME");
+    engine.rootContext ()->setContextProperty ("API_KEY", "2Jfc?C:i-Oa8qSb+hQRAsS33xa7mL~{3uvVnxD1J~0+TR>_g,/o#y&d:}=j2aFn5");
 #if defined(Q_OS_SYMBIAN)||defined(Q_WS_SIMULATOR)
     viewer->setSource(QUrl("qrc:/qml/symbian3/main.qml"));
     viewer->showExpanded();

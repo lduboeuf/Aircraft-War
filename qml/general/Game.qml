@@ -387,6 +387,7 @@ Item
         opacity: game_main.opacity
         onPlay_music:
         {
+            console.log(music_name)
             music.start_music(music_name);
         }
         onAddScore: {
